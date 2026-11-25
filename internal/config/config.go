@@ -13,11 +13,12 @@ import (
 // Config holds the canonical, validated configuration for the bridge.
 type Config struct {
 	// Wyze account credentials
-	WyzeEmail    string
-	WyzePassword string
-	WyzeAPIID    string
-	WyzeAPIKey   string
-	WyzeTOTPKey  string
+	WyzeEmail     string
+	WyzePassword  string
+	WyzeAPIID     string
+	WyzeAPIKey    string
+	WyzeTOTPKey   string
+	WyzeUserAgent string
 
 	// Bridge HTTP server (WebUI + REST API)
 	BridgeIP       string // host IP used in WebRTC ICE candidates and URL generation
@@ -148,11 +149,12 @@ type CamOverride struct {
 func Load() (*Config, error) {
 	cfg := &Config{
 		// Wyze account credentials
-		WyzeEmail:    secret("WYZE_EMAIL"),
-		WyzePassword: secret("WYZE_PASSWORD"),
-		WyzeAPIID:    secretWithAlias("WYZE_API_ID", "API_ID"),
-		WyzeAPIKey:   secretWithAlias("WYZE_API_KEY", "API_KEY"),
-		WyzeTOTPKey:  env("WYZE_TOTP_KEY", ""),
+		WyzeEmail:     secret("WYZE_EMAIL"),
+		WyzePassword:  secret("WYZE_PASSWORD"),
+		WyzeAPIID:     secretWithAlias("WYZE_API_ID", "API_ID"),
+		WyzeAPIKey:    secretWithAlias("WYZE_API_KEY", "API_KEY"),
+		WyzeTOTPKey:   env("WYZE_TOTP_KEY", ""),
+		WyzeUserAgent: env("WYZE_USER_AGENT", ""),
 
 		// Bridge HTTP server
 		BridgeIP:       env("BRIDGE_IP", ""),

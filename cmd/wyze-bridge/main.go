@@ -63,11 +63,12 @@ func main() {
 	// Initialize Wyze API client
 	apiLog := log.With().Str("c", "wyzeapi").Logger()
 	creds := wyzeapi.Credentials{
-		Email:    cfg.WyzeEmail,
-		Password: cfg.WyzePassword,
-		APIID:    cfg.WyzeAPIID,
-		APIKey:   cfg.WyzeAPIKey,
-		TOTPKey:  cfg.WyzeTOTPKey,
+		Email:     cfg.WyzeEmail,
+		Password:  cfg.WyzePassword,
+		APIID:     cfg.WyzeAPIID,
+		APIKey:    cfg.WyzeAPIKey,
+		TOTPKey:   cfg.WyzeTOTPKey,
+		UserAgent: cfg.WyzeUserAgent,
 	}
 	apiClient := wyzeapi.NewClient(creds, Version, apiLog)
 

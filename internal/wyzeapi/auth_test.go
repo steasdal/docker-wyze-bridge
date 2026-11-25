@@ -113,3 +113,22 @@ func TestGeneratePhoneID(t *testing.T) {
 		t.Error("generatePhoneID should produce unique IDs")
 	}
 }
+
+func TestLoginHeaders_UserAgent(t *testing.T) {
+	c := &Client{
+		creds:     Credentials{APIID: "id", APIKey: "key"},
+		bridgeVer: "4.7.0",
+	}
+	h := c.loginHeaders()
+	if ua := h["user-agent"]; ua == "" || ua == "docker-wyze-bridge/4.7.0" {
+		t.Errorf("default login user-agent should avoid shared docker-wyze-bridge bucket, got %q", ua)
+	}
+
+	cCustom := &Client{
+		creds:     Credentials{APIID: "id", APIKey: "key", UserAgent: "my-custom-client/1.0"},
+		bridgeVer: "4.7.0",
+	}
+	if got := cCustom.loginHeaders()["user-agent"]; got != "my-custom-client/1.0" {
+		t.Errorf("custom login user-agent = %q, want %q", got, "my-custom-client/1.0")
+	}
+}

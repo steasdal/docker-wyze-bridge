@@ -50,11 +50,12 @@ var appKeys = map[string]string{
 
 // Credentials holds the Wyze account credentials needed for login.
 type Credentials struct {
-	Email    string
-	Password string // plain or "md5:"-prefixed triple-hash
-	APIID    string
-	APIKey   string
-	TOTPKey  string
+	Email     string
+	Password  string // plain or "md5:"-prefixed triple-hash
+	APIID     string
+	APIKey    string
+	TOTPKey   string
+	UserAgent string // optional override for login User-Agent header
 }
 
 // IsSet returns true if all required credentials are present.
@@ -346,10 +347,18 @@ func (c *Client) loginHeaders() map[string]string {
 	if phoneID == "" {
 		phoneID = generatePhoneID()
 	}
+	userAgent := strings.TrimSpace(c.creds.UserAgent)
+	if userAgent == "" {
+		suffix := phoneID
+		if len(suffix) > 8 {
+			suffix = suffix[:8]
+		}
+		userAgent = fmt.Sprintf("wyze-client-%s/%s", suffix, c.bridgeVer)
+	}
 	return map[string]string{
 		"apikey":     c.creds.APIKey,
 		"keyid":      c.creds.APIID,
-		"user-agent": fmt.Sprintf("docker-wyze-bridge/%s", c.bridgeVer),
+		"user-agent": userAgent,
 		"phone-id":   phoneID,
 	}
 }
